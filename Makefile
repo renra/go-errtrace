@@ -1,7 +1,7 @@
 SOURCES=./
 
 dep:
-	dep init
+	#dep init
 
 example:
 	go run ${SOURCES}/examples/main.go
