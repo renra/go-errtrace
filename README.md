@@ -6,7 +6,7 @@ Errors with traces. Inspired heavily by [tracerr](https://github.com/ztrue/trace
 
 ### Creating new errors
 
-```
+```go
 package main
 
 import (
@@ -26,7 +26,7 @@ func main() {
 
 ### Wrapping existing errors
 
-```
+```go
 package main
 
 import (
