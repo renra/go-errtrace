@@ -1,17 +1,9 @@
-# Errtrace
-
-Errors with traces. Inspired heavily by [tracerr](https://github.com/ztrue/tracerr), only simplified and added string formatting of the whole trace.
-
-## Usage
-
-### Creating new errors
-
-```
 package main
 
 import (
   "fmt"
-  "github.com/renra/go-errtrace/errtrace"
+  "errors"
+  "app/errtrace"
 )
 
 func main() {
@@ -20,26 +12,26 @@ func main() {
   fmt.Println(fmt.Sprintf("%v", err.Error()))
   fmt.Println(fmt.Sprintf("%v", err.Frames))
   fmt.Println(fmt.Sprintf("%v", err.StringStack()))
-}
 
-```
+  fmt.Println("")
 
-### Wrapping existing errors
-
-```
-package main
-
-import (
-  "fmt"
-  "github.com/renra/go-errtrace/errtrace"
-)
-
-func main() {
-  err := theCrasher()
+  err = theCrasher()
 
   fmt.Println(fmt.Sprintf("%v", err.Error()))
   fmt.Println(fmt.Sprintf("%v", err.Frames))
   fmt.Println(fmt.Sprintf("%v", err.StringStack()))
+
+  fmt.Println("")
+
+  defer func() {
+    if e := recover(); e != nil {
+      fmt.Println(fmt.Sprintf("%v", err.Error()))
+      fmt.Println(fmt.Sprintf("%v", err.Frames))
+      fmt.Println(fmt.Sprintf("%v", err.StringStack()))
+    }
+  }()
+
+  panic(err)
 }
 
 func theCrasher() *errtrace.Error {
@@ -49,4 +41,3 @@ func theCrasher() *errtrace.Error {
 func theCrasherDependent() *errtrace.Error {
   return errtrace.Wrap(errors.New("Crash now"))
 }
-```
