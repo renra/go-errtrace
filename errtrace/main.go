@@ -27,18 +27,23 @@ func New(message string) *Error {
 	return trace(fmt.Errorf(message), 2)
 }
 
-func Wrap(err error) *Error {
+func Wrap(err interface{}) *Error {
 	if err == nil {
 		return nil
 	}
 
-	e, ok := err.(*Error)
+  var resultingError error
 
-	if ok {
-		return e
-	}
+  switch e := err.(type) {
+  case *Error:
+    return e
+  case error:
+    resultingError = e
+  default:
+    resultingError = fmt.Errorf("%v", e)
+  }
 
-	return trace(err, 2)
+	return trace(resultingError, 2)
 }
 
 func (e *Error) Error() string {
